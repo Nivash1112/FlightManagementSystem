@@ -25,12 +25,18 @@ public class UserServiceImpl implements UserService{
 	public boolean createUser(UserSignUp userDetails) throws UserAlreadyFoundException{
 		
 		Optional<UserModel> userFound= userRepo.findById(userDetails.getUserName());
-		if(userFound== null) {
+		if(userFound.isEmpty()) {
 			UserModel response=userRepo.save(userDtoToModel.convertUserDtoToUserModel(userDetails));
 			return (response!=null)?true:false;
 		}else {
 			throw new UserAlreadyFoundException("User Already Found Exception...!");
 		}
+	}
+
+	@Override
+	public Optional<UserModel> findByUsername(String username) {
+		return userRepo.findById(username);
+	
 	}
 
 }

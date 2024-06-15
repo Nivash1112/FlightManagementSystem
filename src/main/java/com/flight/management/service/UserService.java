@@ -9,4 +9,6 @@ import com.flight.management.exception.UserAlreadyFoundException;
 public interface UserService {
 
 	public boolean createUser(UserSignUp userDetails) throws UserAlreadyFoundException;
+
+	public Object findByUsername(String username);
 }

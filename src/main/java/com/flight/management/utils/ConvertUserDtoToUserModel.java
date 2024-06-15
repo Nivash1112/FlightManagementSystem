@@ -17,6 +17,7 @@ public class ConvertUserDtoToUserModel {
 		userModel.setDateOfBirth(userDto.getDateOfBirth());
 		userModel.setPassword(userDto.getPassword());
 		userModel.setContactNumber(userDto.getContactNumber());
+		userModel.setAdmin(false);
 		return userModel;
 	}
 	

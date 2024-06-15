@@ -27,4 +27,5 @@ public class UserModel {
 	private long contactNumber;
 	private Date dateOfBirth;
 	private String password;
+	private boolean admin;
 }

@@ -10,16 +10,19 @@ import com.flight.management.exception.UserAlreadyFoundException;
 import com.flight.management.service.UserService;
 
 
+
 @RestController
 public class UserController {
 	
 	@Autowired
 	private UserService userSerivce;
+	
 
 	@PostMapping("/signUp")
 	public String postMethodName(@RequestBody UserSignUp entity) throws UserAlreadyFoundException {
 		userSerivce.createUser(entity);
 		return "user Created. Have a great day...!";
 	}
+	
 	
 }

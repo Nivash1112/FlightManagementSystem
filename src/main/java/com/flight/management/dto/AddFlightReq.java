@@ -1,25 +1,16 @@
-package com.flight.management.model;
+package com.flight.management.dto;
 
 import java.sql.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-public class FlightDetails {
+public class AddFlightReq {
 
-	@Id
 	private int flightId;
 	private String flightName;
 	private String vendor;
@@ -27,5 +18,4 @@ public class FlightDetails {
 	private String fromPlace;
 	private String toDestination;
 	private Date journeyDate;
-	
 }
