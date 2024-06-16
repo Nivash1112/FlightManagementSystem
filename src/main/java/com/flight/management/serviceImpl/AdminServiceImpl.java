@@ -1,5 +1,6 @@
 package com.flight.management.serviceImpl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import com.flight.management.dto.AddFlightReq;
 import com.flight.management.dto.AuthResponse;
 import com.flight.management.exception.AuthenticationOrAuthorizationException;
 import com.flight.management.exception.FlightAlreadyFoundException;
+import com.flight.management.exception.NoFlightsFound;
 import com.flight.management.model.FlightDetails;
 import com.flight.management.repository.FlightDetailsRepo;
 import com.flight.management.service.AdminService;
@@ -39,9 +41,57 @@ public class AdminServiceImpl implements AdminService {
 			} else {
 				throw new FlightAlreadyFoundException("Flight Already Found Exception...!");
 			}
-		}else {
+		} else {
 			throw new AuthenticationOrAuthorizationException("Authentication/Authorization Exception...!");
 		}
+	}
+
+	@Override
+	public List<FlightDetails> getFlightDetails(String userName, String password)
+			throws NoFlightsFound, AuthenticationOrAuthorizationException {
+		// TODO Auto-generated method stub
+		AuthResponse authResponse = authService.authorizationService(userName, password);
+		if (authResponse.isAdmin() && authResponse.isAuthorization()) {
+			List<FlightDetails> listOfFlightDetails = flightDetailsRepo.findAll();
+			if (listOfFlightDetails.size() > 0) {
+				return listOfFlightDetails;
+			} else {
+				throw new NoFlightsFound("No Flights Found...!");
+			}
+		} else {
+			throw new AuthenticationOrAuthorizationException("Authentication/Authorization Exception...!");
+		}
+	}
+
+	@Override
+	public boolean modifyFlightService(AddFlightReq addFlight, String userName, String password) throws NoFlightsFound, AuthenticationOrAuthorizationException {
+		AuthResponse authResponse = authService.authorizationService(userName, password);
+		if (authResponse.isAdmin() && authResponse.isAuthorization()) {
+			Optional<FlightDetails> flightDetails = flightDetailsRepo.findById(addFlight.getFlightId());
+			if (flightDetails.isPresent()) {
+				return (flightDetailsRepo.save(dtoToModel.FlightDetailsDtoToModel(addFlight))!=null);
+			} else {
+				throw new NoFlightsFound("No Flights Found...!");
+			}
+		} else {
+			throw new AuthenticationOrAuthorizationException("Authentication/Authorization Exception...!");
+		}
+	}
+	
+	@Override
+	public boolean deleteFlightService(int flightId, String userName, String password) throws NoFlightsFound, AuthenticationOrAuthorizationException {
+		AuthResponse authResponse = authService.authorizationService(userName, password);
+		if (authResponse.isAdmin() && authResponse.isAuthorization()) {
+			Optional<FlightDetails> flightDetails = flightDetailsRepo.findById(flightId);
+			if (flightDetails.isPresent()) {
+				flightDetailsRepo.deleteById(flightId);
+			} else {
+				throw new NoFlightsFound("No Flights Found...!");
+			}
+		} else {
+			throw new AuthenticationOrAuthorizationException("Authentication/Authorization Exception...!");
+		}
+		return false;
 	}
 
 }
