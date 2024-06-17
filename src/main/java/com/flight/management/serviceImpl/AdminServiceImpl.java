@@ -68,7 +68,7 @@ public class AdminServiceImpl implements AdminService {
 		AuthResponse authResponse = authService.authorizationService(userName, password);
 		if (authResponse.isAdmin() && authResponse.isAuthorization()) {
 			Optional<FlightDetails> flightDetails = flightDetailsRepo.findById(addFlight.getFlightId());
-			if (flightDetails.isPresent()) {
+			if (!flightDetails.isEmpty()) {
 				return (flightDetailsRepo.save(dtoToModel.FlightDetailsDtoToModel(addFlight))!=null);
 			} else {
 				throw new NoFlightsFound("No Flights Found...!");
@@ -83,15 +83,15 @@ public class AdminServiceImpl implements AdminService {
 		AuthResponse authResponse = authService.authorizationService(userName, password);
 		if (authResponse.isAdmin() && authResponse.isAuthorization()) {
 			Optional<FlightDetails> flightDetails = flightDetailsRepo.findById(flightId);
-			if (flightDetails.isPresent()) {
+			if (!flightDetails.isEmpty()) {
 				flightDetailsRepo.deleteById(flightId);
+				return true;
 			} else {
 				throw new NoFlightsFound("No Flights Found...!");
 			}
 		} else {
 			throw new AuthenticationOrAuthorizationException("Authentication/Authorization Exception...!");
 		}
-		return false;
 	}
 
 }
